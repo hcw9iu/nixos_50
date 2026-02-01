@@ -52,8 +52,9 @@ in {
       "$shiftMod" = "SUPER_SHIFT";
 
       exec-once = [
-        "${pkgs.bitwarden}/bin/bitwarden"
+        #"${pkgs.bitwarden}/bin/bitwarden"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+        "${pkgs.fcitx5}/bin/fcitx5" #for typing zhuyin
       ];
 
       #monitor = [
@@ -70,7 +71,7 @@ in {
         #"DP-7, disable"
         #"DP-8, disable"
         #"DP-9, disable"
-        "HDMI-A-2,1920x1080@60,780x-1080,1"
+        "HDMI-A-2,1920x1080@60,320x-1080,1"
         #",prefered,auto,1"
       ];
 
@@ -89,6 +90,14 @@ in {
         "ELECTRON_OZONE_PLATFORM_HINT,auto"
         # "GTK_THEME,FlatColor:dark"
         # "GTK2_RC_FILES,/home/hadi/.local/share/themes/FlatColor/gtk-2.0/gtkrc"
+
+        #### for fcitx5 ####
+        "GTK_IM_MODULE,fcitx"
+        "QT_IM_MODULE,fcitx"
+        "XMODIFIERS,@im=fcitx"
+        "SDL_IM_MODULE,fcitx"
+        ####################
+
         "__GL_GSYNC_ALLOWED,0"
         "__GL_VRR_ALLOWED,0"
         "DISABLE_QT5_COMPAT,0"

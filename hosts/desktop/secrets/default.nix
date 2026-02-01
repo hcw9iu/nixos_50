@@ -2,11 +2,11 @@
   imports = [ inputs.sops-nix.homeManagerModules.sops ];
 
   sops = {
-    age.keyFile = "/home/hcw/.config/sops/age/keys.txt";
+    #age.keyFile = "/home/hcw/.config/sops/age/keys.txt";
     defaultSopsFile = ./secrets.yaml;
     secrets = {
       #sshconfig = { path = "/home/hcw/.ssh/config"; };
-      github-key = { path = "/home/hcw/.ssh/github"; };
+      #github-key = { path = "/home/hcw/.ssh/github"; };
       #gitlab-key = { path = "/home/hcw/.ssh/gitlab"; };
       #jack-key = { path = "/home/hcw/.ssh/jack"; };
       #pia = { path = "/home/hcw/.config/pia/pia.ovpn"; };

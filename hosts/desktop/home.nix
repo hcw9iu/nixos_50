@@ -18,6 +18,7 @@
     ../../home/programs/lazygit
     #../../home/programs/nh
     ../../home/programs/zen
+    #../../home/programs/fcitx5
     #../../home/programs/server-page
 
     # Scripts
@@ -47,6 +48,15 @@
     ./secrets
   ];
 
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+
+    fcitx5.addons = with pkgs; [
+      fcitx5-chewing
+      fcitx5-gtk
+    ];
+  };
+
   home = {
     inherit (config.var) username;
     homeDirectory = "/home/" + config.var.username;
@@ -58,6 +68,9 @@
       vlc # Video player
       #blanket # White-noise app
       signal-desktop
+
+      #rgb
+      openrgb
 
       # Dev
       go
@@ -91,23 +104,11 @@
       cbonsai
       pipes
       cmatrix
-      # cava
 
       # Backup
       firefox
       vscode
-      #cursor
 
-      # Temp
-      mpv
-      pnpm
-
-      # FIXME: Temporary, for a course on Kubernetes
-      #terraform
-      #ansible
-      #azure-cli
-      #k3d
-      #kubectl
     ];
 
     # Import my profile picture, used by the hyprpanel dashboard

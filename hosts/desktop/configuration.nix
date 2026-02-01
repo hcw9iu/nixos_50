@@ -26,6 +26,8 @@
     ../../nixos/docker.nix
     #../../nixos/pia.nix
 
+    #../../nixos/openrgb.nix
+
 
     # Choose your theme here
     ../../themes/stylix/nixy.nix
