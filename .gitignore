@@ -1,2 +1,4 @@
 todolist.md
 .sops.yaml
+.aider*
+.env

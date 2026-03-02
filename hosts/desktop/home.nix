@@ -1,5 +1,10 @@
-{ pkgs, config, ... }: {
-
+{ pkgs, config, inputs, ... }:
+let
+  pkgsCodex = import inputs.nixpkgsCodex {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
+in {
   imports = [
     ./variables.nix
 
@@ -51,65 +56,68 @@
   i18n.inputMethod = {
     enabled = "fcitx5";
 
-    fcitx5.addons = with pkgs; [
-      fcitx5-chewing
-      fcitx5-gtk
-    ];
+    fcitx5.addons = with pkgs; [ fcitx5-chewing fcitx5-gtk ];
   };
 
   home = {
     inherit (config.var) username;
     homeDirectory = "/home/" + config.var.username;
 
-    packages = with pkgs; [
-      # Apps
-      discord # Chat
-      bitwarden # Password manager
-      vlc # Video player
-      #blanket # White-noise app
-      signal-desktop
+    packages = with pkgs;
+      [
+        # Apps
+        discord # Chat
+        bitwarden # Password manager
+        vlc # Video player
+        #blanket # White-noise app
+        signal-desktop
 
-      #rgb
-      openrgb
+        #rgb
+        openrgb
 
-      # Dev
-      go
-      nodejs
-      python310
-      jq
-      figlet
-      just
-      uv
-      gh
-      gh-dash
-      git
+        # Dev
+        go
+        nodejs
+        python310
+        jq
+        figlet
+        just
+        uv
+        gh
+        gh-dash
+        git
 
-      # Rust 
-      #rustup 
-      rustc
-      cargo
+        # Rust 
+        #rustup 
+        rustc
+        cargo
 
-      # Utils
-      appimage-run
-      zip
-      unzip
-      optipng
-      pfetch
-      pandoc
-      btop
-      nitch
+        # Utils
+        appimage-run
+        zip
+        unzip
+        optipng
+        pfetch
+        pandoc
+        btop
+        nitch
 
-      # Just cool
-      peaclock
-      cbonsai
-      pipes
-      cmatrix
+        # Just cool
+        peaclock
+        cbonsai
+        pipes
+        cmatrix
 
-      # Backup
-      firefox
-      vscode
+        # Backup
+        firefox
+        vscode
 
-    ];
+        aider-chat
+
+        # Communication
+        session-desktop
+
+      ] ++ [ pkgsCodex.codex ];
 
     # Import my profile picture, used by the hyprpanel dashboard
     file.".profile_picture.png" = { source = ./profile_picture.png; };

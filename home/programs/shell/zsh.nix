@@ -39,6 +39,25 @@ in {
       bindkey -M viins '\es' sesh-sessions
     '';
 
+    initExtra = ''
+      # nix-ai-help: 從 sops 解密後的檔案載入 API key
+      #if [[ -r "$HOME/.config/nix-ai-help/api-key" ]]; then
+      export OPENAI_API_KEY=$(cat "$HOME/.config/nix-ai-help/api-key")
+      #fi
+
+      y() {
+        local tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+        command yazi --cwd-file="$tmp" "$@"
+        if [ -f "$tmp" ]; then
+          local dir="$(cat "$tmp")"
+          [ -n "$dir" ] && cd "$dir"
+          rm -f "$tmp"
+        fi
+      }
+
+
+    '';
+
     history = {
       ignoreDups = true;
       save = 10000;
@@ -57,10 +76,10 @@ in {
     #and 
     #nix search nixpkgs nvidia_x11
     #sessionVariables = {
-      #LD_LIBRARY_PATH = lib.concatStringsSep ":" [
-        #"${pkgs.linuxPackages_6_16.nvidia_x11_latest}/lib" # change the package name according to nix search result
-        #"$LD_LIBRARY_PATH"
-      #];
+    #LD_LIBRARY_PATH = lib.concatStringsSep ":" [
+    #"${pkgs.linuxPackages_6_16.nvidia_x11_latest}/lib" # change the package name according to nix search result
+    #"$LD_LIBRARY_PATH"
+    #];
     #};
 
     shellAliases = {
@@ -103,5 +122,8 @@ in {
       gaa = "git add .";
       gcm = "git commit -m";
     };
+  };
+  home.sessionVariables = {
+    LD_LIBRARY_PATH = "/run/opengl-driver/lib:${"$"}LD_LIBRARY_PATH";
   };
 }

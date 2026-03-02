@@ -27,6 +27,8 @@
     #../../nixos/pia.nix
 
     #../../nixos/openrgb.nix
+    ../../nixos/steam.nix
+    #../../nixos/nixai.nix
 
 
     # Choose your theme here

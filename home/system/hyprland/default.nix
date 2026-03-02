@@ -45,7 +45,8 @@ in {
     enable = true;
     xwayland.enable = true;
     systemd.enable = true;
-    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+    #package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+    package = pkgs.hyprland;
 
     settings = {
       "$mod" = "SUPER";
@@ -54,7 +55,9 @@ in {
       exec-once = [
         #"${pkgs.bitwarden}/bin/bitwarden"
         "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
-        "${pkgs.fcitx5}/bin/fcitx5" #for typing zhuyin
+        "${pkgs.fcitx5}/bin/fcitx5" # for typing zhuyin
+        # Start hyprpaper inside the Hyprland session so it gets the right env.
+        "${pkgs.hyprpaper}/bin/hyprpaper -c /home/${config.var.username}/.config/hypr/hyprpaper.conf"
       ];
 
       #monitor = [
@@ -122,7 +125,6 @@ in {
         gaps_in = gaps-in;
         gaps_out = gaps-out;
         border_size = border-size;
-        border_part_of_window = true;
         layout = "master";
       };
 
@@ -130,6 +132,7 @@ in {
         active_opacity = active-opacity;
         inactive_opacity = inactive-opacity;
         rounding = rounding;
+        border_part_of_window = true;
         shadow = {
           enabled = true;
           range = 20;
@@ -144,7 +147,7 @@ in {
         mfact = 0.5;
       };
 
-      gestures = { workspace_swipe = true; };
+      gesture = [ "4, horizontal, workspace" ];
 
       misc = {
         vfr = true;
@@ -152,13 +155,24 @@ in {
         disable_splash_rendering = true;
         disable_autoreload = true;
         focus_on_activate = true;
-        new_window_takes_over_fullscreen = 2;
+        #new_window_takes_over_fullscreen = 2;
+        on_focus_under_fullscreen = 2;
       };
 
-      windowrulev2 =
-        [ "float, tag:modal" "pin, tag:modal" "center, tag:modal" ];
+      workspace = [ "8, layout:scrolling" ];
 
-      layerrule = [ "noanim, launcher" "noanim, ^ags-.*" ];
+      #windowrulev2 =
+      #  [ "float, tag:modal" "pin, tag:modal" "center, tag:modal" ];
+      windowrule = [
+        "float on, match:tag modal"
+        "pin on, match:tag modal"
+        "center on, match:tag modal"
+      ];
+
+      layerrule = [
+        "no_anim on, match:namespace launcher"
+        "no_anim on, match:namespace ^ags-.*"
+      ];
 
       input = {
         kb_layout = keyboardLayout;
