@@ -43,6 +43,7 @@ in {
       # nix-ai-help: 從 sops 解密後的檔案載入 API key
       #if [[ -r "$HOME/.config/nix-ai-help/api-key" ]]; then
       export OPENAI_API_KEY=$(cat "$HOME/.config/nix-ai-help/api-key")
+      export GITHUB_PAT=$(cat "$HOME/.config/nix-ai-help/githubPat")
       #fi
 
       y() {

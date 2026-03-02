@@ -11,6 +11,7 @@
       #jack-key = { path = "/home/hcw/.ssh/jack"; };
       #pia = { path = "/home/hcw/.config/pia/pia.ovpn"; };
       "openai_api" = { path = "/home/hcw/.config/nix-ai-help/api-key"; };
+      "githubPat" = { path = "/home/hcw/.config/nix-ai-help/githubPat"; };
     };
   };
 
