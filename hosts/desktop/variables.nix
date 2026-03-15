@@ -22,6 +22,9 @@
     autoUpgrade = false;
     autoGarbageCollector = false;
 
+    # Bar selection: "hyprpanel" (default) or "topbar"
+    bar = "topbar";
+
     # Choose your theme variables here
     #theme = import ../../themes/var/pinky.nix;
     theme = import ../../themes/var/nixy.nix;

@@ -2,3 +2,4 @@ todolist.md
 .sops.yaml
 .aider*
 .env
+./thirdparty/

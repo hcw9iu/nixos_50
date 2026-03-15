@@ -6,7 +6,7 @@
 #- - `hyprpanel-show` - Show hyprpanel.
 #- - `hyprpanel-hide` - Hide hyprpanel.
 #- - `hyprpanel-reload` - Reload hyprpanel.
-{ pkgs, ... }:
+{ pkgs, lib, config, ... }:
 let
   hyprpanel-toggle = pkgs.writeShellScriptBin "hyprpanel-toggle" ''
     hyprpanel toggleWindow bar-0
@@ -41,7 +41,8 @@ let
     [ $(pgrep "ags") ] && pkill ags
     hyprctl dispatch exec hyprpanel
   '';
-in {
-  home.packages =
-    [ hyprpanel-toggle hyprpanel-reload hyprpanel-hide hyprpanel-show ];
-}
+in
+  lib.mkIf (config.var.bar == "hyprpanel") {
+    home.packages =
+      [ hyprpanel-toggle hyprpanel-reload hyprpanel-hide hyprpanel-show ];
+  }

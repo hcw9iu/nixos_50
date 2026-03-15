@@ -1982,6 +1982,22 @@
         "type": "github"
       }
     },
+    "matuwall": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773048081,
+        "narHash": "sha256-hwCkimCxJee0AW6FKbcX5adJWm8PrF8wCqJOMUfjens=",
+        "owner": "naurissteins",
+        "repo": "Matuwall",
+        "rev": "79bfed9282dfd04cc3a83bd99819e78fd0d8fbf0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "naurissteins",
+        "repo": "Matuwall",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -2354,6 +2370,7 @@
         "hyprpolkitagent": "hyprpolkitagent_2",
         "hyprspace": "hyprspace",
         "kernel-src": "kernel-src",
+        "matuwall": "matuwall",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-hypr": "nixpkgs-hypr",
@@ -2363,6 +2380,7 @@
         "nvidia-src": "nvidia-src",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
+        "thirdparty-nixos-configuration": "thirdparty-nixos-configuration",
         "wallpapers": "wallpapers",
         "zen-browser": "zen-browser"
       }
@@ -2577,6 +2595,19 @@
         "owner": "nix-systems",
         "repo": "default",
         "type": "github"
+      }
+    },
+    "thirdparty-nixos-configuration": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1773337445,
+        "narHash": "sha256-yqiQN+g7JBWiFE5r63mn79thLY6E7gknQ1vtSvx50vE=",
+        "path": "/home/hcw/.config/nixos/thirdparty/nixos-configuration",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/hcw/.config/nixos/thirdparty/nixos-configuration",
+        "type": "path"
       }
     },
     "tinted-foot": {

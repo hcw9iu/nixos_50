@@ -11,7 +11,9 @@ let
   hyprfocus-on = pkgs.writeShellScriptBin "hyprfocus-on"
     # bash
     ''
-      hyprpanel-hide
+      if command -v hyprpanel-hide >/dev/null 2>&1; then
+        hyprpanel-hide
+      fi
       hyprctl keyword "general:gaps_in" 0
       hyprctl keyword "general:gaps_out" 0
       hyprctl keyword "general:border_size" 1
@@ -26,7 +28,9 @@ let
     # bash
     ''
       hyprctl reload
-      hyprpanel-show
+      if command -v hyprpanel-show >/dev/null 2>&1; then
+        hyprpanel-show
+      fi
       rm /tmp/hyprfocus
     '';
 

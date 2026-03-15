@@ -1,0 +1,37 @@
+* {
+  all: unset;
+}
+
+.sys-pill {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-radius: 18px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sys-pill:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.sys-text {
+  font-family: "JetBrains Mono";
+  font-weight: 700;
+  font-size: 12px;
+  color: #cdd6f4;
+}
+
+.sys-icon-wifi {
+  font-family: "Iosevka Nerd Font";
+  font-size: 16px;
+  color: #89b4fa;
+}
+
+.sys-wifi.active {
+  background: linear-gradient(135deg, #89b4fa, #74c7ec);
+  border: none;
+}
+
+.sys-wifi.active .sys-text,
+.sys-wifi.active .sys-icon-wifi {
+  color: #11111b;
+}

@@ -11,7 +11,7 @@ in {
     # Programs
     ../../home/programs/kitty
     ../../home/programs/nvim
-    #../../home/programs/qutebrowser
+    #../../home/programs/qutebrowser #not useful, function ok
     ../../home/programs/shell
     ../../home/programs/fetch
     ../../home/programs/git
@@ -22,6 +22,8 @@ in {
     ../../home/programs/thunar
     ../../home/programs/lazygit
     #../../home/programs/nh
+    ../../home/programs/matuwall
+    ../../home/programs/quickshell-wallpaper
     ../../home/programs/zen
     #../../home/programs/fcitx5
     #../../home/programs/server-page
@@ -43,6 +45,7 @@ in {
     ../../home/system/udiskie
     ../../home/system/clipman
     ../../home/system/tofi
+    ../../home/system/wlogout
 
     # Python Packages
     #../../home/python/base # include pytorch
@@ -53,15 +56,10 @@ in {
     ./secrets
   ];
 
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-
-    fcitx5.addons = with pkgs; [ fcitx5-chewing fcitx5-gtk ];
-  };
-
   home = {
     inherit (config.var) username;
     homeDirectory = "/home/" + config.var.username;
+    sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
 
     packages = with pkgs;
       [

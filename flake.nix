@@ -98,8 +98,17 @@
 
     zen-browser.url = "git+https://git.sr.ht/~canasta/zen-browser-flake/";
 
+    matuwall = {
+      url = "github:naurissteins/Matuwall";
+      flake = false;
+    };
+
     wallpapers = {
       url = "github:anotherhadi/nixy-wallpapers"; # overwrite
+      flake = false;
+    };
+    thirdparty-nixos-configuration = {
+      url = "path:/home/hcw/.config/nixos/thirdparty/nixos-configuration";
       flake = false;
     };
     #cursor.url = "github:hcw9iu/cursor-flake/main?ssh=yes"; # overwrite, private repo

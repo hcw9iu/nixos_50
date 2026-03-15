@@ -6,7 +6,7 @@
 
       general = {
         ignore_dbus_inhibit = false;
-        lock_cmd = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+        lock_cmd = "pidof hyprlock || ~/.config/hypr/scripts/update_lock_wallpaper.sh; ~/.config/hypr/sakoora.hyprlock/hyprlock-run/panels && ${pkgs.hyprlock}/bin/hyprlock --grace 0";
         before_sleep_cmd = "loginctl lock-session";
         after_sleep_cmd = "hyprctl dispatch dpms on";
       };
@@ -14,7 +14,7 @@
       listener = [
         {
           timeout = 600;
-          on-timeout = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+          on-timeout = "pidof hyprlock || ~/.config/hypr/scripts/update_lock_wallpaper.sh; ~/.config/hypr/sakoora.hyprlock/hyprlock-run/panels && ${pkgs.hyprlock}/bin/hyprlock --grace 0";
         }
 
         {

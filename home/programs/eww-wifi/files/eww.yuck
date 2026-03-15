@@ -1,0 +1,31 @@
+(defpoll WIFI_STATUS :interval "2s" `bash ./scripts/sys_info.sh --wifi-status`)
+(defpoll WIFI_ICON :interval "2s" `bash ./scripts/sys_info.sh --wifi-icon`)
+(defpoll WIFI_SSID :interval "2s" `bash ./scripts/sys_info.sh --wifi-ssid`)
+
+(defwidget wifi_pill []
+  (eventbox :onclick "bash ~/.config/hypr/scripts/qs_manager.sh toggle network"
+            :onrightclick "nm-connection-editor &"
+            :cursor "pointer"
+            :tooltip {WIFI_STATUS == "enabled" ? (WIFI_SSID != "" ? "Connected to ${WIFI_SSID}" : "WiFi enabled") : "WiFi disabled"}
+    (box :class "sys-pill sys-wifi ${WIFI_STATUS == 'enabled' ? 'active' : ''}"
+         :orientation "h" :spacing 10 :space-evenly false
+      (label :class "sys-icon-wifi" :text WIFI_ICON)
+      (label :class "sys-text"
+             :text {WIFI_STATUS == "enabled" ? (WIFI_SSID != "" ? WIFI_SSID : "Disconnected") : "Off"}
+             :limit-width 12)
+    )
+  )
+)
+
+(defwindow wifi_bar
+  :monitor 0
+  :geometry (geometry :x "10px"
+                      :y "10px"
+                      :width "210px"
+                      :height "40px"
+                      :anchor "top left")
+  :stacking "fg"
+  :exclusive false
+  :namespace "qs_wifi"
+  (wifi_pill)
+)
