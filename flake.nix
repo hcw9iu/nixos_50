@@ -19,6 +19,7 @@
     };
 
     nixpkgsCodex.url = "github:nixos/nixpkgs/nixos-25.11";
+    codex-nix.url = "github:sadjow/codex-nix";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     nur.url = "github:nix-community/NUR";
     home-manager = {

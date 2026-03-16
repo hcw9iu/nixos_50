@@ -115,7 +115,9 @@ in {
         # Communication
         session-desktop
 
-      ] ++ [ pkgsCodex.codex ];
+      ] ++ [
+        inputs.codex-nix.packages.${pkgs.system}.codex
+      ];
 
     # Import my profile picture, used by the hyprpanel dashboard
     file.".profile_picture.png" = { source = ./profile_picture.png; };
