@@ -91,11 +91,44 @@ handle_network_prep() {
     (nmcli device wifi rescan) &
 }
 
+move_qs_master_to_cursor_workspace() {
+    local cursor_json monitor_json active_json target_ws qs_addr
+
+    active_json=$(hyprctl -j activewindow 2>/dev/null || echo "")
+    if [ -n "$active_json" ]; then
+        target_ws=$(jq -r '.workspace.id // empty' <<<"$active_json")
+    fi
+
+    if [ -z "$target_ws" ] || [ "$target_ws" = "null" ]; then
+        cursor_json=$(hyprctl -j cursorpos 2>/dev/null || echo "")
+        monitor_json=$(hyprctl -j monitors 2>/dev/null || echo "")
+        if [ -n "$cursor_json" ] && [ -n "$monitor_json" ]; then
+            target_ws=$(jq -r --argjson cursor "$cursor_json" '
+                map(select(
+                    ($cursor.x >= .x) and ($cursor.x < (.x + .width)) and
+                    ($cursor.y >= .y) and ($cursor.y < (.y + .height))
+                ))[0].activeWorkspace.id // empty
+            ' <<<"$monitor_json")
+        fi
+    fi
+
+    if [ -n "$target_ws" ]; then
+        qs_addr=$(hyprctl clients -j | jq -r '.[] | select(.title=="qs-master-wallpaper") | .address' | head -n1)
+        if [ -n "$qs_addr" ]; then
+            hyprctl dispatch movetoworkspacesilent "$target_ws,address:$qs_addr" >/dev/null 2>&1 \
+              || hyprctl dispatch movetoworkspace "$target_ws,address:$qs_addr" >/dev/null 2>&1
+        else
+            hyprctl dispatch movetoworkspacesilent "$target_ws" >/dev/null 2>&1 \
+              || hyprctl dispatch movetoworkspace "$target_ws" >/dev/null 2>&1
+        fi
+    fi
+}
+
 # -----------------------------------------------------------------------------
 # ENSURE MASTER WINDOW & TOP BAR ARE ALIVE (ZOMBIE WATCHDOG)
 # -----------------------------------------------------------------------------
 QS_PID=$(pgrep -f "quickshell.*Main\.qml")
-WIN_EXISTS=$(hyprctl clients -j | grep "qs-master")
+WIN_EXISTS=$(hyprctl clients -j | grep "qs-master-wallpaper")
 
 # 1. Manage the Master morphing window
 if [[ -z "$QS_PID" ]] || [[ -z "$WIN_EXISTS" ]]; then
@@ -108,7 +141,7 @@ if [[ -z "$QS_PID" ]] || [[ -z "$WIN_EXISTS" ]]; then
 fi
 
 # Ensure the popup gets focus on every call
-hyprctl dispatch focuswindow "title:^(qs-master)$" >/dev/null 2>&1
+hyprctl dispatch focuswindow "title:^(qs-master-wallpaper)$" >/dev/null 2>&1
 
 # -----------------------------------------------------------------------------
 # MAIN LOGIC
@@ -147,5 +180,10 @@ if [[ "$ACTION" == "open" || "$ACTION" == "toggle" ]]; then
     else
         echo "$TARGET" > "$IPC_FILE"
     fi
+    (
+        move_qs_master_to_cursor_workspace
+        sleep 0.12
+        move_qs_master_to_cursor_workspace
+    ) >/dev/null 2>&1 &
     exit 0
 fi

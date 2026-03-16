@@ -6,7 +6,7 @@ import Quickshell.Io
 
 FloatingWindow {
     id: masterWindow
-    title: "qs-master"
+    title: "qs-master-wallpaper"
     color: "transparent"
     
     // Always mapped to prevent Wayland from destroying the surface and Hyprland from auto-centering!
@@ -14,10 +14,10 @@ FloatingWindow {
 
     // FIX: Push it off-screen the moment the component loads using Hyprland's dispatcher
     Component.onCompleted: {
-        Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact 1 1,title:^(qs-master)$" && hyprctl dispatch movewindowpixel "exact -5000 -5000,title:^(qs-master)$"`]);
+        Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact 1 1,title:^(qs-master-wallpaper)$" && hyprctl dispatch movewindowpixel "exact -5000 -5000,title:^(qs-master-wallpaper)$"`]);
     }
 
-    property int screenW: Screen.width
+    property int screenW: 2560
     property int screenH: Screen.height
 
     property string currentActive: "hidden" 
@@ -40,7 +40,7 @@ FloatingWindow {
         "music":     { w: 700, h: 620, x: 12, y: 70, comp: "music/MusicPopup.qml" },
         "network":   { w: 900, h: 700, x: screenW - 920, y: 70, comp: "network/NetworkPopup.qml" },
         "stewart":   { w: 800, h: 600, x: Math.floor((screenW/2)-(800/2)), y: Math.floor((screenH/2)-(600/2)), comp: "stewart/stewart.qml" },
-        "wallpaper": { w: wallpaperW, h: 500, x: Math.floor((screenW - wallpaperW)/2)+320, y: Math.floor((screenH/2)-(500/2)), comp: "wallpaper/WallpaperPicker.qml" },
+        "wallpaper": { w: wallpaperW, h: 500, x: Math.floor((screenW - wallpaperW)/2), y: Math.floor((screenH/2)-(500/2)), comp: "wallpaper/WallpaperPicker.qml" },
         "hidden":    { w: 1, h: 1, x: -5000, y: -5000, comp: "" } 
     }
 
@@ -99,7 +99,7 @@ FloatingWindow {
 
     Shortcut {
         sequence: "Escape"
-        onActivated: Quickshell.execDetached(["bash", Quickshell.env("HOME") + "/.config/hypr/scripts/quickshell/qs_manager.sh", "close"])
+        onActivated: Quickshell.execDetached(["bash", Quickshell.env("HOME") + "/.config/hypr/scripts/qs_wallpaper/qs_manager.sh", "close"])
     }
 
     function switchWidget(newWidget, arg) {
@@ -117,7 +117,7 @@ FloatingWindow {
                 masterWindow.animH = 1;
                 masterWindow.isVisible = false;
                 
-                Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact 1 1,title:^(qs-master)$" && hyprctl dispatch movewindowpixel "exact ${cx} ${cy},title:^(qs-master)$"`]);
+                Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact 1 1,title:^(qs-master-wallpaper)$" && hyprctl dispatch movewindowpixel "exact ${cx} ${cy},title:^(qs-master-wallpaper)$"`]);
                 delayedClear.start();
             }
         } else {
@@ -133,7 +133,7 @@ FloatingWindow {
                 masterWindow.width = 1;
                 masterWindow.height = 1;
 
-                Quickshell.execDetached(["bash", "-c", `hyprctl dispatch movewindowpixel "exact ${cx} ${cy},title:^(qs-master)$"`]);
+                Quickshell.execDetached(["bash", "-c", `hyprctl dispatch movewindowpixel "exact ${cx} ${cy},title:^(qs-master-wallpaper)$"`]);
 
                 prepTimer.newWidget = newWidget;
                 prepTimer.newArg = arg;
@@ -180,7 +180,7 @@ FloatingWindow {
             masterWindow.currentX = t.x;
             masterWindow.currentY = t.y;
 
-            Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact ${t.w} ${t.h},title:^(qs-master)$" && hyprctl dispatch movewindowpixel "exact ${t.x} ${t.y},title:^(qs-master)$"`]);
+            Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact ${t.w} ${t.h},title:^(qs-master-wallpaper)$" && hyprctl dispatch movewindowpixel "exact ${t.x} ${t.y},title:^(qs-master-wallpaper)$"`]);
 
             let props = newWidget === "wallpaper" ? { "widgetArg": newArg } : {};
             widgetStack.replace(t.comp, props, StackView.Immediate);
@@ -220,7 +220,7 @@ FloatingWindow {
         masterWindow.currentX = t.x;
         masterWindow.currentY = t.y;
         
-        Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact ${t.w} ${t.h},title:^(qs-master)$" && hyprctl dispatch movewindowpixel "exact ${t.x} ${t.y},title:^(qs-master)$"`]);
+        Quickshell.execDetached(["bash", "-c", `hyprctl dispatch resizewindowpixel "exact ${t.w} ${t.h},title:^(qs-master-wallpaper)$" && hyprctl dispatch movewindowpixel "exact ${t.x} ${t.y},title:^(qs-master-wallpaper)$"`]);
         
         masterWindow.isVisible = true;
         
@@ -273,7 +273,7 @@ FloatingWindow {
             masterWindow.disableMorph = false;
             
             // Banished safely back to the shadow realm off-screen
-            let cmd = `hyprctl dispatch resizewindowpixel "exact 1 1,title:^(qs-master)$" && hyprctl dispatch movewindowpixel "exact -5000 -5000,title:^(qs-master)$"`;
+            let cmd = `hyprctl dispatch resizewindowpixel "exact 1 1,title:^(qs-master-wallpaper)$" && hyprctl dispatch movewindowpixel "exact -5000 -5000,title:^(qs-master-wallpaper)$"`;
             Quickshell.execDetached(["bash", "-c", cmd]);
         }
     }

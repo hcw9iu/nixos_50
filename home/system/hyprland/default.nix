@@ -1407,6 +1407,8 @@ in {
         "center on, match:tag modal"
         "float on, match:title ^(qs-master)$"
         "pin on, match:title ^(qs-master)$"
+        "float on, match:title ^(qs-master-wallpaper)$"
+        "pin on, match:title ^(qs-master-wallpaper)$"
       ];
 
       layerrule = [
