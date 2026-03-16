@@ -1413,6 +1413,8 @@ in {
         "no_anim on, match:namespace launcher"
         "no_anim on, match:namespace ^ags-.*"
         "blur on, match:namespace swaync-notification-window"
+        "blur on, match:namespace wlogout"
+        "blur on, match:namespace logout_dialog"
       ];
 
       input = {
