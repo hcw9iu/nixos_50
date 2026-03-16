@@ -9,10 +9,10 @@ let
   rounding = config.var.theme.rounding;
   blur = config.var.theme.blur;
   keyboardLayout = config.var.keyboardLayout;
-  thirdpartyRoot = inputs.thirdparty-nixos-configuration;
+  quickshellSource = ../../../home/system/quickshell;
   quickshellDir = pkgs.runCommand "quickshell-thirdparty" { nativeBuildInputs = [ pkgs.python3 ]; } ''
     mkdir -p "$out"
-    cp -r ${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/. "$out/"
+    cp -r ${quickshellSource}/. "$out/"
     chmod -R u+w "$out"
     sed -i 's|$(dirname "$0")/.env|$HOME/.config/hypr/qs-weather.env|g' "$out/calendar/weather.sh"
     sed -i 's|echo ".env file not found!"|:|g' "$out/calendar/weather.sh"
@@ -669,69 +669,6 @@ case $cmd in
     --disconnect) disconnect_dev "$2" ;;
 esac
 SH
-    awk '
-    BEGIN{skip=0}
-    /\/\/ Search/ {skip=1; next}
-    skip {
-        if (/\/\/ Notifications/) {skip=0; print; next}
-        next
-    }
-    {print}
-    ' "$out/TopBar.qml" > "$out/TopBar.qml.tmp"
-    mv "$out/TopBar.qml.tmp" "$out/TopBar.qml"
-
-
-    awk '
-    BEGIN{inleft=0; skipped=0}
-    /\/\/ ---------------- LEFT ----------------/ {inleft=1}
-    inleft && /\/\/ Notifications/ {
-        skipped=1
-        next
-    }
-    inleft && skipped {
-        if (/\/\/ Workspaces/) {skipped=0; print; next}
-        next
-    }
-    {print}
-    ' "$out/TopBar.qml" > "$out/TopBar.qml.tmp"
-    mv "$out/TopBar.qml.tmp" "$out/TopBar.qml"
-
-    # Remove Notifications block in right island (if present)
-    awk '
-    BEGIN{skip=0; brace=0; started=0}
-    /\/\/ Notifications/ {skip=1; next}
-    skip {
-        if (!started && /Rectangle[[:space:]]*\\{/) {started=1}
-        if (started) {
-            brace += gsub(/\\{/, "{");
-            brace -= gsub(/\\}/, "}");
-            if (brace <= 0) {skip=0; next}
-        }
-        next
-    }
-    {print}
-    ' "$out/TopBar.qml" > "$out/TopBar.qml.tmp"
-    mv "$out/TopBar.qml.tmp" "$out/TopBar.qml"
-    awk '
-    BEGIN{skip_kb=0; skip_bat=0; brace=0; started=0}
-    /\/\/ KB/ {skip_kb=1; next}
-    skip_kb {
-        if (/\/\/ WiFi/) {skip_kb=0; print; next}
-        next
-    }
-    /\/\/ Battery/ {skip_bat=1; brace=0; started=0; next}
-    skip_bat {
-        if (!started && /Rectangle[[:space:]]*\{/) {started=1}
-        if (started) {
-            brace += gsub(/\{/, "{");
-            brace -= gsub(/\}/, "}");
-            if (brace <= 0) {skip_bat=0; next}
-        }
-        next
-    }
-    {print}
-    ' "$out/TopBar.qml" > "$out/TopBar.qml.tmp"
-    mv "$out/TopBar.qml.tmp" "$out/TopBar.qml"
     cat > "$out/workspaces.sh" <<'SH'
 #!/usr/bin/env bash
 
@@ -1045,10 +982,11 @@ SH
     QS_DIR="$(cd "$(dirname "''${BASH_SOURCE[0]}")" && pwd)/quickshell"
     BT_PID_FILE="$HOME/.cache/bt_scan_pid"
     BT_SCAN_LOG="$HOME/.cache/bt_scan.log"
-    SRC_DIR="$HOME/Images/Wallpapers"
+    SRC_DIR="$HOME/Pictures/WallPaper"
     THUMB_DIR="$HOME/.cache/wallpaper_picker/thumbs"
 
     IPC_FILE="/tmp/qs_widget_state"
+    CURRENT_WIDGET_FILE="/tmp/qs_current_widget"
     ACTION="$1"
     TARGET="$2"
 
@@ -1086,18 +1024,22 @@ SH
 
         TARGET_INDEX=0
         CURRENT_SRC=""
+        CURRENT_SRC_PATH=""
 
         if pgrep -a "mpvpaper" > /dev/null; then
-            CURRENT_SRC=$(pgrep -a mpvpaper | grep -o "$SRC_DIR/[^' ]*" | head -n1)
-            CURRENT_SRC=$(basename "$CURRENT_SRC")
+            CURRENT_SRC_PATH=$(pgrep -a mpvpaper | grep -o "$SRC_DIR/[^' ]*" | head -n1)
+            CURRENT_SRC=$(basename "$CURRENT_SRC_PATH")
         fi
 
         if [ -z "$CURRENT_SRC" ] && command -v swww >/dev/null; then
-            CURRENT_SRC=$(swww query 2>/dev/null | grep -o "$SRC_DIR/[^ ]*" | head -n1)
-            CURRENT_SRC=$(basename "$CURRENT_SRC")
+            CURRENT_SRC_PATH=$(swww query 2>/dev/null | grep -o "$SRC_DIR/[^ ]*" | head -n1)
+            CURRENT_SRC=$(basename "$CURRENT_SRC_PATH")
         fi
 
         if [ -n "$CURRENT_SRC" ]; then
+            if [ -z "$CURRENT_SRC_PATH" ]; then
+                CURRENT_SRC_PATH="$SRC_DIR/$CURRENT_SRC"
+            fi
             EXT="''${CURRENT_SRC##*.}"
             if [[ "''${EXT,,}" =~ ^(mp4|mkv|mov|webm)$ ]]; then
                 TARGET_THUMB="000_$CURRENT_SRC"
@@ -1108,6 +1050,15 @@ SH
             MATCH_LINE=$(ls -1 "$THUMB_DIR" | grep -nF "$TARGET_THUMB" | cut -d: -f1)
             if [ -n "$MATCH_LINE" ]; then
                 TARGET_INDEX=$((MATCH_LINE - 1))
+            fi
+
+            # Sync lockscreen wallpaper to current wallpaper when opening picker
+            "$HOME/.config/hypr/scripts/update_lock_wallpaper.sh" "''${CURRENT_SRC_PATH:-}" >/dev/null 2>&1 || true
+        fi
+        if [ "$TARGET_INDEX" -eq 0 ]; then
+            COUNT=$(ls -1 "$THUMB_DIR" 2>/dev/null | wc -l | tr -d " ")
+            if [ -n "$COUNT" ] && [ "$COUNT" -gt 0 ]; then
+                TARGET_INDEX=$((COUNT / 2))
             fi
         fi
         export WALLPAPER_INDEX="$TARGET_INDEX"
@@ -1143,9 +1094,6 @@ SH
             if [ -n "$qs_addr" ]; then
                 hyprctl dispatch movetoworkspacesilent "$target_ws,address:$qs_addr" >/dev/null 2>&1 \
                   || hyprctl dispatch movetoworkspace "$target_ws,address:$qs_addr" >/dev/null 2>&1
-            else
-                hyprctl dispatch movetoworkspacesilent "$target_ws" >/dev/null 2>&1 \
-                  || hyprctl dispatch movetoworkspace "$target_ws" >/dev/null 2>&1
             fi
         fi
     }
@@ -1191,6 +1139,10 @@ SH
 
     if [[ "$ACTION" == "close" ]]; then
         echo "close" > "$IPC_FILE"
+        (
+            sleep 0.08
+            hyprctl dispatch focuswindow "title:^(qs-master)$" >/dev/null 2>&1
+        ) &
         if [[ "$TARGET" == "network" || "$TARGET" == "all" || -z "$TARGET" ]]; then
             if [ -f "$BT_PID_FILE" ]; then
                 kill $(cat "$BT_PID_FILE") 2>/dev/null
@@ -1202,6 +1154,11 @@ SH
     fi
 
     if [[ "$ACTION" == "open" || "$ACTION" == "toggle" ]]; then
+        CURRENT_WIDGET="$(cat "$CURRENT_WIDGET_FILE" 2>/dev/null || echo hidden)"
+        if [[ "$ACTION" == "toggle" && "$CURRENT_WIDGET" == "$TARGET" ]]; then
+            echo "$TARGET" > "$IPC_FILE"
+            exit 0
+        fi
         if [[ "$TARGET" == "network" ]]; then
             handle_network_prep
             echo "$TARGET" > "$IPC_FILE"
@@ -1213,8 +1170,12 @@ SH
         fi
         (
             move_qs_master_to_cursor_workspace
+            hyprctl dispatch focuswindow "title:^(qs-master)$" >/dev/null 2>&1
+            sleep 0.05
+            hyprctl dispatch focuswindow "title:^(qs-master)$" >/dev/null 2>&1
             sleep 0.12
             move_qs_master_to_cursor_workspace
+            hyprctl dispatch focuswindow "title:^(qs-master)$" >/dev/null 2>&1
         ) >/dev/null 2>&1 &
         exit 0
     fi
@@ -1447,9 +1408,9 @@ in {
       executable = true;
     };
     "hypr/scripts/Main.qml".source =
-      "${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/Main.qml";
+      "${quickshellSource}/Main.qml";
     "hypr/scripts/TopBar.qml".source =
-      "${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/TopBar.qml";
+      "${quickshellSource}/TopBar.qml";
     "swaync".source = ../../../home/programs/swaync;
     "quickshell/QuickSnip".source =
       config.lib.file.mkOutOfStoreSymlink "/home/${config.var.username}/.config/nixos/thirdparty/QuickSnip";

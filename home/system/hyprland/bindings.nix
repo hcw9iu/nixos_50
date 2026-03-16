@@ -11,7 +11,7 @@
       "$mod,SPACE, exec, menu" # Launcher
       "$mod,C, exec, quickmenu" # Quickmenu
       "$mod,W, exec, ${config.home.homeDirectory}/.local/bin/matuwall-toggle" # Matuwall
-      "$mod SHIFT, W, exec, bash ~/.config/hypr/scripts/qs_wallpaper/qs_manager.sh toggle wallpaper" # Quickshell wallpaper
+      "$mod SHIFT, W, exec, bash ~/.config/hypr/scripts/qs_manager.sh toggle wallpaper" # Quickshell wallpaper
       "$shiftMod,SPACE, exec, hyprfocus-toggle" # Toggle HyprFocus
       #"$mod,TAB, overview:toggle" # Overview
 
