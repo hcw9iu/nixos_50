@@ -1450,7 +1450,7 @@ in {
       "${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/Main.qml";
     "hypr/scripts/TopBar.qml".source =
       "${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/TopBar.qml";
-    "swaync".source = ../../../thirdparty/hypr/config/swaync;
+    "swaync".source = ../../../home/programs/swaync;
     "quickshell/QuickSnip".source =
       config.lib.file.mkOutOfStoreSymlink "/home/${config.var.username}/.config/nixos/thirdparty/QuickSnip";
     "hypr/scripts/qs_wallpaper/qs_manager.sh" = {
