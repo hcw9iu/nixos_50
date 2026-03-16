@@ -24,20 +24,20 @@ let
           systemctl --user stop hypridle.service
           glyph="󰅶"
           icon="$icon_dir/activated.svg"
-          title="Caffeine Activated"
-          description="Caffeine is now active!\nYour screen will not turn off automatically."
+          title="   Caffeine Activated"
+          description="   Caffeine is now active!\n   Your screen will not turn off automatically."
         else
           systemctl --user start hypridle.service
           glyph="󰾪"
           icon="$icon_dir/deactivated.svg"
-          title="Caffeine Deactivated"
-          description="Caffeine is now deactivated!\nYour screen will turn off automatically."
+          title="   Caffeine Deactivated"
+          description="   Caffeine is now deactivated!\n   Your screen will turn off automatically."
         fi
 
         cat > "$icon" <<EOF
     <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-      <rect width="128" height="128" rx="24" fill="#11111b"/>
-      <text x="58" y="90" text-anchor="middle" dominant-baseline="central"
+      <circle cx="64" cy="72" r="70" fill="#11111b"/>
+      <text x="58" y="92" text-anchor="middle" dominant-baseline="central"
             font-family="Symbols Nerd Font Mono, Symbols Nerd Font, monospace"
             font-size="72" fill="#cba6f7">$glyph</text>
     </svg>
