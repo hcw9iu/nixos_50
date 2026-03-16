@@ -1412,7 +1412,6 @@ in {
       layerrule = [
         "no_anim on, match:namespace launcher"
         "no_anim on, match:namespace ^ags-.*"
-        "blur on, match:namespace swaync-notification-window"
         "blur on, match:namespace wlogout"
         "blur on, match:namespace logout_dialog"
       ];
@@ -1449,7 +1448,7 @@ in {
       "${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/Main.qml";
     "hypr/scripts/TopBar.qml".source =
       "${thirdpartyRoot}/config/sessions/hyprland/scripts/quickshell/TopBar.qml";
-    "swaync".source = "${quickshellDir}/swaync";
+    "swaync".source = ../../../thirdparty/hypr/config/swaync;
     "quickshell/QuickSnip".source =
       config.lib.file.mkOutOfStoreSymlink "/home/${config.var.username}/.config/nixos/thirdparty/QuickSnip";
     "hypr/scripts/qs_wallpaper/qs_manager.sh" = {

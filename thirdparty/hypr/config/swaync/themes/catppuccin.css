@@ -1,32 +1,3 @@
-:root {
-  --cc-bg: rgba(17, 17, 27, 0.8);
-  --noti-border-color: rgb(203, 166, 247);
-  --noti-bg: 30, 30, 46;
-  --noti-bg-alpha: 0.8;
-  --noti-bg-darker: rgb(38, 38, 38);
-  --noti-bg-hover: rgba(56, 56, 56, 0.3);
-  --noti-bg-focus: rgba(68, 68, 68, 0);
-  --noti-close-bg: rgba(78, 78, 78, 0);
-  --noti-close-bg-hover: rgba(94, 94, 94, 0);
-  --text-color: rgb(255, 255, 255);
-  --text-color-disabled: rgb(150, 150, 150);
-  --bg-selected: rgb(0, 128, 255);
-  --notification-icon-size: 64px;
-  --notification-app-icon-size: calc(var(--notification-icon-size) / 3);
-  --notification-group-icon-size: 32px;
-  --border: 1px solid var(--noti-border-color);
-  --border-radius: 12px;
-  --notification-shadow: 0 0 0 0px rgba(0, 0, 0, 0.0),
-    0 1px 3px 1px rgba(0, 0, 0, 0.7), 0 2px 6px 2px rgba(0, 0, 0, 0.3);
-  --font-size-body: 15px;
-  --font-size-summary: 16px;
-  /* Deprecated variables (because of their typos). Keeeping them around for backwards compatibility. */
-  --hover-tranistion: background 0.15s ease-in-out;
-  --group-collapse-tranistion: opacity 400ms ease-in-out;
-  --hover-transition: var(--hover-tranistion);
-  --group-collapse-transition: var(--group-collapse-tranistion);
-}
-
 /* Fallback for older CSS themes */
 @define-color cc-bg rgba(46, 46, 46, 0.7);
 @define-color noti-border-color rgba(255, 255, 255, 0.15);
@@ -47,8 +18,8 @@ notificationwindow, blankwindow, blankwindow {
 }
 
 .close-button {
-  background: var(--noti-close-bg);
-  color: var(--text-color);
+  background: rgba(78, 78, 78, 0);
+  color: rgb(255, 255, 255);
   text-shadow: none;
   padding: 0;
   border-radius: 100%;
@@ -62,8 +33,8 @@ notificationwindow, blankwindow, blankwindow {
 
 .close-button:hover {
   box-shadow: none;
-  background: var(--noti-close-bg-hover);
-  transition: var(--hover-tranistion);
+  background: rgba(94, 94, 94, 0);
+  transition: background 0.15s ease-in-out;
   border: none;
 }
 
@@ -73,19 +44,19 @@ notificationwindow, blankwindow, blankwindow {
 }
 
 .notification-row:focus {
-  background: var(--noti-bg-focus);
+  background: rgba(68, 68, 68, 0);
 }
 
 .notification-row .notification-background {
-  padding: 6px 12px;
+  padding: 6px 18px 6px 8px;
 }
 
 .notification-row .notification-background .notification {
-  border-radius: var(--border-radius);
-  border: var(--border);
+  border-radius: 12px;
+  border: 1px solid rgb(203, 166, 247);
   padding: 0;
-  transition: var(--hover-tranistion);
-  background: rgba(var(--noti-bg), var(--noti-bg-alpha));
+  transition: background 0.15s ease-in-out;
+  background: rgba(30, 30, 46, 0.8);
 }
 
 .notification-row .notification-background .notification .notification-default-action {
@@ -94,9 +65,9 @@ notificationwindow, blankwindow, blankwindow {
   box-shadow: none;
   background: transparent;
   border: none;
-  color: var(--text-color);
-  transition: var(--hover-tranistion);
-  border-radius: var(--border-radius);
+  color: rgb(255, 255, 255);
+  transition: background 0.15s ease-in-out;
+  border-radius: 12px;
 }
 
 .mpris {
@@ -104,15 +75,10 @@ notificationwindow, blankwindow, blankwindow {
     border-radius: 12px;
     margin: 8px;
     padding: 8px;
-    transform: scale(0.8);    /* Shrinks entire widget */
-    transform-origin: top center;
 }
    
 
 .mpris-player {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
 }
 
@@ -128,10 +94,7 @@ notificationwindow, blankwindow, blankwindow {
 }
 
 .mpris-controls {
-    display: flex;
-    justify-content: center;
     margin-top: 6px;
-    gap: 10px;
 }
 
 .mpris-button {
@@ -155,9 +118,6 @@ notificationwindow, blankwindow, blankwindow {
 .widget-buttons-grid {
     margin: 6px;
     padding: 4px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
 }
 .widget-buttons-grid button {
     background: #11111b;
@@ -166,11 +126,9 @@ notificationwindow, blankwindow, blankwindow {
     font-size: 18px;
     color: #fab387;
     border: 1px solid #fab387;
-    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .widget-buttons-grid button:hover {
-    transform: scale(1.1);
 }
 
 .widget-buttons-grid button:checked {
@@ -202,13 +160,3 @@ notificationwindow, blankwindow, blankwindow {
 .notification-group.collapsed .notification {
   background-color: #1e1e2e;
 }
-
-.notification image {
-    /* Makes the image fill the available icon box */
-    object-fit: cover;          /* fill entire box without distortion */
-    width: 100%;                /* stretch to full width of container */
-    height: 100%;               /* stretch to full height */
-    border-radius: 12px;         /* match your theme’s corners */
-    margin-right: 10px;
-}
-
